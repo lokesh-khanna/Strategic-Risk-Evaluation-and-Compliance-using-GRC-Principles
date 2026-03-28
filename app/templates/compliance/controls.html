@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compliance Controls – PaySecure Technologies GRC</title>
+    <meta name="description"
+        content="PCI-DSS v4.0, GDPR, ISO 27001:2022, and RBI PA/PG compliance controls for PaySecure Technologies.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0b0f1a;
+            color: #e2e8f0;
+            min-height: 100vh
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 240px;
+            background: #0d1117;
+            border-right: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            flex-direction: column;
+            z-index: 100
+        }
+
+        .sidebar-logo {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .logo-text {
+            font-size: 16px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .logo-sub {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 1px;
+            margin-top: 3px;
+            text-transform: uppercase
+        }
+
+        .nav-section {
+            padding: 16px 0
+        }
+
+        .nav-label {
+            padding: 4px 20px 8px;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.25);
+            text-transform: uppercase;
+            letter-spacing: 1.5px
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            position: relative
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            color: #e2e8f0;
+            background: rgba(99, 102, 241, 0.1)
+        }
+
+        .nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #6366f1;
+            border-radius: 0 2px 2px 0
+        }
+
+        .nav-icon {
+            width: 18px;
+            text-align: center;
+            font-size: 16px
+        }
+
+        .sidebar-user {
+            margin-top: auto;
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            flex-shrink: 0
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0
+        }
+
+        .user-name-text {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e2e8f0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis
+        }
+
+        .user-role-text {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35)
+        }
+
+        .logout-btn {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 6px;
+            color: #fca5a5;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none
+        }
+
+        .main {
+            margin-left: 240px;
+            padding: 28px 32px
+        }
+
+        .page-header {
+            margin-bottom: 24px
+        }
+
+        .page-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: #f0f4ff
+        }
+
+        .page-subtitle {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 5px
+        }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 16px;
+            font-size: 13.5px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .alert-danger {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.25);
+            color: #fca5a5
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.25);
+            color: #86efac
+        }
+
+        .alert-warning {
+            background: rgba(251, 191, 36, 0.12);
+            border: 1px solid rgba(251, 191, 36, 0.25);
+            color: #fde68a
+        }
+
+        .alert-info {
+            background: rgba(99, 102, 241, 0.12);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: #c7d2fe
+        }
+
+        /* ── Framework filter tabs ── */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap
+        }
+
+        .filter-tab {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            letter-spacing: 0.3px
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: rgba(99, 102, 241, 0.15);
+            border-color: rgba(99, 102, 241, 0.3);
+            color: #a5b4fc
+        }
+
+        /* ── Summary cards ── */
+        .fw-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px
+        }
+
+        .fw-card {
+            background: #0d1117;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            padding: 16px 18px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .fw-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px
+        }
+
+        .fw-pci::before {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24)
+        }
+
+        .fw-gdpr::before {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa)
+        }
+
+        .fw-iso::before {
+            background: linear-gradient(90deg, #6366f1, #8b5cf6)
+        }
+
+        .fw-rbi::before {
+            background: linear-gradient(90deg, #10b981, #34d399)
+        }
+
+        .fw-card .fw-reg {
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.8px
+        }
+
+        .fw-card .fw-pct {
+            font-size: 28px;
+            font-weight: 800;
+            margin: 6px 0 4px
+        }
+
+        .fw-card .fw-meta {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3)
+        }
+
+        .fw-pct.c-green {
+            color: #34d399
+        }
+
+        .fw-pct.c-yellow {
+            color: #fbbf24
+        }
+
+        .fw-pct.c-red {
+            color: #f87171
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 6px
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 2px
+        }
+
+        .fill-green {
+            background: linear-gradient(90deg, #10b981, #34d399)
+        }
+
+        .fill-yellow {
+            background: linear-gradient(90deg, #f59e0b, #fbbf24)
+        }
+
+        .fill-red {
+            background: linear-gradient(90deg, #ef4444, #f97316)
+        }
+
+        /* ── Controls table ── */
+        .table-card {
+            background: #0d1117;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 14px;
+            overflow: hidden
+        }
+
+        .table-header {
+            padding: 18px 22px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .table-header h2 {
+            font-size: 13px;
+            font-weight: 700;
+            color: #c7d2fe;
+            text-transform: uppercase;
+            letter-spacing: 0.8px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse
+        }
+
+        thead tr {
+            background: rgba(255, 255, 255, 0.03)
+        }
+
+        th {
+            padding: 11px 14px;
+            text-align: left;
+            font-size: 10px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06)
+        }
+
+        td {
+            padding: 12px 14px;
+            font-size: 13px;
+            color: #c7d2fe;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            vertical-align: middle
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.02)
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none
+        }
+
+        .ctrl-code {
+            font-size: 12px;
+            font-weight: 800;
+            color: #a5b4fc;
+            font-family: monospace;
+            white-space: nowrap
+        }
+
+        .ctrl-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 2px
+        }
+
+        .ctrl-desc {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            line-height: 1.5
+        }
+
+        .reg-tag {
+            display: inline-block;
+            padding: 3px 9px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.3px;
+            white-space: nowrap
+        }
+
+        .reg-pci {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fde68a;
+            border: 1px solid rgba(245, 158, 11, 0.2)
+        }
+
+        .reg-gdpr {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            border: 1px solid rgba(59, 130, 246, 0.2)
+        }
+
+        .reg-iso {
+            background: rgba(99, 102, 241, 0.15);
+            color: #c7d2fe;
+            border: 1px solid rgba(99, 102, 241, 0.2)
+        }
+
+        .reg-rbi {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.2)
+        }
+
+        .status-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 10px;
+            font-size: 10px;
+            font-weight: 700;
+            white-space: nowrap
+        }
+
+        .status-Implemented {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #6ee7b7
+        }
+
+        .status-In-Progress {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fde68a
+        }
+
+        .status-Not-Started {
+            background: rgba(100, 116, 139, 0.15);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            color: #94a3b8
+        }
+
+        .status-Under-Review {
+            background: rgba(99, 102, 241, 0.15);
+            border: 1px solid rgba(99, 102, 241, 0.3);
+            color: #c7d2fe
+        }
+
+        .mapped-count {
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #a5b4fc
+        }
+
+        .date-chip {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.3);
+            white-space: nowrap
+        }
+    </style>
+</head>
+
+<body>
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-text">🛡️ PaySecure GRC</div>
+            <div class="logo-sub">Series-B · 200 Employees</div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">Navigation</div>
+            <a href="{{ url_for('dashboard.view') }}" class="nav-item"><span class="nav-icon">🏠</span> Dashboard</a>
+            <a href="{{ url_for('risk.register') }}" class="nav-item"><span class="nav-icon">⚠️</span> Risk Register</a>
+            <a href="{{ url_for('compliance.controls') }}" class="nav-item active"><span class="nav-icon">📋</span>
+                Compliance Controls</a>
+            {% if 'admin' in session.get('roles',[]) or 'auditor' in session.get('roles',[]) %}
+            <a href="{{ url_for('audit.trail') }}" class="nav-item"><span class="nav-icon">🔍</span> Audit Trail</a>
+            {% endif %}
+        </div>
+        <div class="nav-section">
+            <div class="nav-label">Frameworks</div>
+            <a href="#" class="nav-item" onclick="filterFW('PCI-DSS v4.0')"><span class="nav-icon">💳</span> PCI-DSS
+                v4.0</a>
+            <a href="#" class="nav-item" onclick="filterFW('GDPR')"><span class="nav-icon">🇪🇺</span> GDPR</a>
+            <a href="#" class="nav-item" onclick="filterFW('ISO 27001:2022')"><span class="nav-icon">🏛️</span> ISO
+                27001:2022</a>
+            <a href="#" class="nav-item" onclick="filterFW('RBI PA/PG Guidelines 2020')"><span
+                    class="nav-icon">🏦</span> RBI PA/PG</a>
+        </div>
+        <div class="sidebar-user">
+            {% set uname = session.get('username','user') %}
+            <div class="user-pill">
+                <div class="user-avatar">{{ uname[0]|upper }}</div>
+                <div class="user-info">
+                    <div class="user-name-text">{{ uname }}</div>
+                    <div class="user-role-text">{{ session.get('roles',[''])[0]|replace('_',' ')|title }}</div>
+                </div>
+                <a href="{{ url_for('auth.logout') }}" class="logout-btn">Out</a>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="page-header">
+            <h1 class="page-title">📋 Compliance Controls</h1>
+            <p class="page-subtitle">PCI-DSS v4.0 · GDPR (EU) 2016/679 · ISO 27001:2022 Annex A · RBI PA/PG Guidelines
+                2020</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}{% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}{% endif %}
+        {% endwith %}
+
+        <!-- Framework Summary Cards -->
+        <div class="fw-summary">
+            {% for s in stats %}
+            {% set pct = (s.active_controls / s.total_controls * 100) | round(0) | int if s.total_controls else 0 %}
+            {% set cls = 'c-green' if pct >= 75 else ('c-yellow' if pct >= 50 else 'c-red') %}
+            {% set fill = 'fill-green' if pct >= 75 else ('fill-yellow' if pct >= 50 else 'fill-red') %}
+            {% set fw_cls = 'fw-pci' if 'PCI' in s.regulation else ('fw-gdpr' if 'GDPR' in s.regulation else ('fw-iso'
+            if 'ISO' in s.regulation else 'fw-rbi')) %}
+            <div class="fw-card {{ fw_cls }}">
+                <div class="fw-reg">{{ s.regulation }}</div>
+                <div class="fw-pct {{ cls }}">{{ pct }}%</div>
+                <div class="fw-meta">{{ s.active_controls }}/{{ s.total_controls }} implemented</div>
+                <div class="progress-bar">
+                    <div class="progress-fill {{ fill }}" style="width:{{ pct }}%"></div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-bar" id="filterBar">
+            <div class="filter-tab active" onclick="filterFW('all')" id="tab-all">All Frameworks</div>
+            <div class="filter-tab" onclick="filterFW('PCI-DSS v4.0')" id="tab-pci">💳 PCI-DSS v4.0</div>
+            <div class="filter-tab" onclick="filterFW('GDPR')" id="tab-gdpr">🇪🇺 GDPR</div>
+            <div class="filter-tab" onclick="filterFW('ISO 27001:2022')" id="tab-iso">🏛️ ISO 27001:2022</div>
+            <div class="filter-tab" onclick="filterFW('RBI PA/PG Guidelines 2020')" id="tab-rbi">🏦 RBI PA/PG</div>
+        </div>
+
+        <!-- Controls Table -->
+        <div class="table-card">
+            <div class="table-header">
+                <h2>Control Library · {{ controls|length }} Controls</h2>
+            </div>
+            <table id="controlsTable">
+                <thead>
+                    <tr>
+                        <th>Control Code</th>
+                        <th>Control Name &amp; Description</th>
+                        <th>Framework</th>
+                        <th>Status</th>
+                        <th>Mapped Risks</th>
+                        <th>Last Tested</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ctrl in controls %}
+                    {% set reg_key = ctrl.regulation %}
+                    {% set reg_class = 'reg-pci' if 'PCI' in reg_key else ('reg-gdpr' if 'GDPR' in reg_key else
+                    ('reg-iso' if 'ISO' in reg_key else 'reg-rbi')) %}
+                    {% set status_cls = ctrl.implementation_status | replace(' ','-') %}
+                    <tr class="ctrl-row" data-framework="{{ ctrl.regulation }}">
+                        <td><span class="ctrl-code">{{ ctrl.control_code }}</span></td>
+                        <td>
+                            <div class="ctrl-name">{{ ctrl.control_name }}</div>
+                            <div class="ctrl-desc">{{ ctrl.control_description[:120] }}{% if
+                                ctrl.control_description|length > 120 %}…{% endif %}</div>
+                        </td>
+                        <td><span class="reg-tag {{ reg_class }}">{{ ctrl.regulation | replace(' Guidelines 2020','') |
+                                replace(':2022','') }}</span></td>
+                        <td><span class="status-pill status-{{ status_cls }}">{{ ctrl.implementation_status }}</span>
+                        </td>
+                        <td>
+                            <span class="mapped-count">{{ mapping_dict.get(ctrl.control_id, 0) }} risks</span>
+                        </td>
+                        <td>
+                            <div class="date-chip">
+                                {% if ctrl.last_tested %}
+                                {{ ctrl.last_tested.strftime('%d %b %Y') if ctrl.last_tested else '—' }}
+                                {% else %}—{% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <!-- Map to risk -->
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        function filterFW(fw) {
+            // Update tabs
+            document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+            const map = { 'all': 'tab-all', 'PCI-DSS v4.0': 'tab-pci', 'GDPR': 'tab-gdpr', 'ISO 27001:2022': 'tab-iso', 'RBI PA/PG Guidelines 2020': 'tab-rbi' };
+            const tabId = map[fw] || 'tab-all';
+            const tab = document.getElementById(tabId);
+            if (tab) tab.classList.add('active');
+            // Filter rows
+            document.querySelectorAll('.ctrl-row').forEach(row => {
+                row.style.display = (fw === 'all' || row.dataset.framework === fw) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>
