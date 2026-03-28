@@ -1,8 +1,0 @@
-"""
-Compliance Management module blueprint
-"""
-from flask import Blueprint
-
-compliance_bp = Blueprint('compliance', __name__, url_prefix='/compliance')
-
-from . import routes
